@@ -12,12 +12,12 @@ class Die:
 
 
 class Dice_static:
-    def __init__(self, dice_number, die_edges, number_of_rolls):
-        self.dice_number = dice_number
-        self.die_edges = die_edges
-        self.number_of_rolls = number_of_rolls
+    def __init__(self, dice_number, die_edges_list, number_of_rolls=100000):
+        self.dice_number = int(dice_number)
+        self.die_edges = die_edges_list
+        self.number_of_rolls = int(number_of_rolls)
         max_res = 0
-        for x in die_edges:
+        for x in die_edges_list:
             max_res = max_res + x
         self.max_res = max_res
 
@@ -55,13 +55,18 @@ class Dice_static:
 
 def init_dice_rolling():
     dice_number = int(input('number of dice? '))  # запрос на количество кубов
-
-    die_edges = []  # создание списка в котором будет храниться количество граней для каждого куба
+    die_edges_list = []  # создание списка в котором будет храниться количество граней для каждого куба
     for i in range(dice_number):  # непосредственно опрос сколько у каждого куба граней, при пропуске
-        die_edges.append(int(input('number of edges? ')))  # количество граней приравнивается к 6
-
-    number_of_rolls = int(input('number of rolls? '))  # количество бросков
-    challenge = Dice_static(dice_number, die_edges, number_of_rolls)  # хз, но кажется именно вызов этого класса
+        die_edges = input('number of edges?(default=6) ')
+        if die_edges:
+            die_edges_list.append(int(die_edges))
+        else:
+            die_edges_list.append(6)  # количество граней приравнивается к 6
+    number_of_rolls = input('number of rolls?(default=100000) ')  # количество бросков
+    if number_of_rolls:
+        challenge = Dice_static(dice_number, die_edges_list, number_of_rolls)  # хз, но кажется именно вызов этого класса
+    else:
+        challenge = Dice_static(dice_number, die_edges_list)
     ch_dice_rolls = challenge.dice_rolls()  # начинает работу
     county = challenge.counting(ch_dice_rolls)
     challenge.graff(county)  # формирование графа с результатами
